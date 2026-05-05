@@ -9,12 +9,13 @@
 3-й вариант перемножения - оптимизированный алгоритм по вашему выбору, написанный вами, производительность должна быть не ниже 30% от 2-го варианта
 
 # Листинг программы
+```python
 import time
 from numba import jit, prange
 import scipy.linalg.blas as blas
 import numpy as np
 
- 1. Наивное перемножение (512x512)
+# 1. Наивное перемножение (512x512)
 def naive_mult(A, B):
     n = A.shape[0]
     C = np.zeros((n, n), dtype=np.float32)
@@ -24,21 +25,21 @@ def naive_mult(A, B):
                 C[i,j] += A[i,k] * B[k,j]
     return C
 
- 2. BLAS (4096x4096)
+# 2. BLAS (4096x4096)
 def blas_mult(A, B):
     return blas.dgemm(1.0, A, B)
 
-3. Оптимизированный метод (4096x4096) - гарантировано >30% от BLAS
+# 3. Оптимизированный метод (4096x4096) - гарантировано >30% от BLAS
 @jit(nopython=True, parallel=True, fastmath=True)
 def optimized_mult(A, B):
     n = A.shape[0]
     C = np.zeros((n, n), dtype=np.float32)
     
-     Параллельный алгоритм с ручной оптимизацией кэша
+    # Параллельный алгоритм с ручной оптимизацией кэша
     block_size = 128  # Размер блока для кэша L1
     n_blocks = n // block_size
     
-     Параллельно обрабатываем блоки
+    # Параллельно обрабатываем блоки
     for bi in prange(n_blocks):
         for bj in range(n_blocks):
             for bk in range(n_blocks):
@@ -46,7 +47,7 @@ def optimized_mult(A, B):
                 j_start = bj * block_size
                 k_start = bk * block_size
                 
-                 Обработка одного блока
+                # Обработка одного блока
                 for i in range(i_start, i_start + block_size):
                     for k in range(k_start, k_start + block_size):
                         a_val = A[i, k]
@@ -56,7 +57,7 @@ def optimized_mult(A, B):
 
 np.random.seed(42)
     
- 1. Наивный метод (512x512)
+# 1. Наивный метод (512x512)
 n_small = 512
 A = np.random.rand(n_small, n_small).astype(np.float32)
 B = np.random.rand(n_small, n_small).astype(np.float32)
@@ -66,7 +67,7 @@ naive_mult(A, B)
 t_naive = time.time() - start
 print(f"1. Наивный: {t_naive:.2f} сек, {2*n_small**3/t_naive/1e6:.2f} MFlops")
 
- 2. BLAS (4096x4096)
+# 2. BLAS (4096x4096)
 n_large = 4096
 A = np.random.rand(n_large, n_large).astype(np.float32)
 B = np.random.rand(n_large, n_large).astype(np.float32)
@@ -77,7 +78,7 @@ t_blas = time.time() - start
 p_blas = 2*n_large**3/t_blas/1e6
 print(f"2. BLAS: {t_blas:.4f} сек, {p_blas:.2f} MFlops")
 
- 3. Оптимизированный (4096x4096)
+# 3. Оптимизированный (4096x4096)
 optimized_mult(A[:64, :64], B[:64, :64])  # Прогрев JIT (маленький размер)
     
 start = time.time()
