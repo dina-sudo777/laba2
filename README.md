@@ -90,5 +90,6 @@ print(f"3. Оптимизированный: {t_opt:.4f} сек, {p_opt:.2f} MFl
 print('Автор: Воробей Дина Сергеевна, группа: 090301-ПОВа-о25')
 ```
 # Результаты
+<img width="624" height="92" alt="2" src="https://github.com/user-attachments/assets/745d8ff7-585c-4db9-b6b3-2bb3fea5baea" />
 
 
