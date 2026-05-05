@@ -14,6 +14,7 @@ import time
 from numba import jit, prange
 import scipy.linalg.blas as blas
 import numpy as np
+print('Автор: Воробей Дина Сергеевна, группа: 090301-ПОВа-о25')
 
 # 1. Наивное перемножение (512x512)
 def naive_mult(A, B):
